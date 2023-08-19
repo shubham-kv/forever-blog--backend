@@ -1,6 +1,9 @@
 import {NextFunction, Request, Response} from 'express'
 import {CreatePostSchema} from '../joi-schemas'
 
+import {joiSchemaValidationOptions} from '../../../shared/options'
+import {Result} from '../../../shared/types'
+
 export const createPostBodyValidator = (
 	req: Request,
 	res: Response,
@@ -9,10 +12,16 @@ export const createPostBodyValidator = (
 	const value = req.body
 	const schema = CreatePostSchema
 
-	const {error} = schema.validate(value)
+	const {error} = schema.validate(value, joiSchemaValidationOptions)
 
 	if (error) {
-		return res.status(400).send(error.message)
+		const statusCode: number = 400
+		const result: Result<undefined, string> = {
+			success: false,
+			error: error.message
+		}
+
+		return res.status(statusCode).json(result)
 	}
 
 	next()

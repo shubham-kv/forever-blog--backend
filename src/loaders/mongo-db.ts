@@ -27,8 +27,7 @@ export const connectToMongo = async () => {
 		mongoose.connection.once('open', onConnectionOpen)
 		mongoose.connection.on('error', onConnectionError)
 		mongoose.connection.on('disconnected', onDisconnection)
-	}
-	catch(e: any) {
+	} catch (e: any) {
 		handleInitialConnectionError(e)
 	}
 }

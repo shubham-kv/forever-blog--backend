@@ -12,6 +12,6 @@ import {connectToMongo} from './loaders'
 	await connectToMongo()
 
 	app.listen(port, () => {
-		console.log(`Server running at http://localhost:${port}...`)
+		console.log(`\nServer running at http://localhost:${port}/\n`)
 	})
 })()
