@@ -1,8 +1,18 @@
-/dist/**
+# compiled output
+/build
+/node_modules
 
+# env
+.env
+
+# IDEs
+.vscode
+
+# configs
 .prettierrc
 
 package.json
 package-lock.json
-
 tsconfig.json
+
+README.md
