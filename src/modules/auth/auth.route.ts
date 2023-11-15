@@ -5,9 +5,6 @@ import {loginSchemaValidator, loginCredentialsValidator} from './middlewares'
 
 export const authRouter = Router()
 
-authRouter.post(
-	'/login',
-	loginSchemaValidator,
-	loginCredentialsValidator,
-	AuthController.login
-)
+authRouter
+	.route('/login')
+	.post(loginSchemaValidator, loginCredentialsValidator, AuthController.login)
