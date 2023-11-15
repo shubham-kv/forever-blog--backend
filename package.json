@@ -7,7 +7,7 @@
 		"clean": "rimraf build",
 		"prebuild": "npm run clean",
 		"build": "tsc --build",
-		"start": "node build/server",
+		"start": "node build/src/server",
 		"dev": "ts-node-dev src/server",
 		"format": "prettier --write src/**",
 		"test": "cross-env NODE_ENV=test jest --testTimeout=5000",
