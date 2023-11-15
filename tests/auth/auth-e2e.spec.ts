@@ -6,6 +6,8 @@ import app from '../../src/app'
 
 import {LoginDto} from '../../src/modules/auth/dto'
 import {LoginControllerResponse} from '../../src/modules/auth/types'
+import {CreateUserDto} from '../../src/modules/users/dto'
+import {User} from '../../src/modules'
 import {SuccessResponse} from '../../src/shared/types'
 
 import {setup} from '../setup'
@@ -54,25 +56,33 @@ describe('POST /auth/login', () => {
 	})
 
 	it('authenticates the user', async () => {
-		await Promise.all(
-			existingUsers.map(async (existingUser) => {
-				const loginData: LoginDto = {
-					email: existingUser.email,
-					password: existingUser.password
-				}
+		const createUserDto: CreateUserDto = {
+			firstName: faker.person.firstName(),
+			lastName: faker.person.lastName(),
+			email: faker.internet.email(),
+			password: faker.internet.password()
+		}
 
-				const expectedResponse: SuccessResponse<LoginControllerResponse> = {
-					success: true,
-					data: {
-						token: expect.stringMatching(/.*/)
-					}
-				}
+		// save the user to the database before
+		const userDoc = new User(createUserDto)
+		await userDoc.save()
 
-				const res = await request.post('/auth/login').send(loginData)
+		const loginData: LoginDto = {
+			email: createUserDto.email,
+			password: createUserDto.password
+		}
 
-				expect(res.status).toBe(200)
-				expect(res.body).toStrictEqual(expectedResponse)
-			})
-		)
+		const expectedResponse: SuccessResponse<LoginControllerResponse> = {
+			success: true,
+			data: {
+				token: expect.stringMatching(/.*/)
+			}
+		}
+
+		// assert for successful login
+		const res = await request.post('/auth/login').send(loginData)
+
+		expect(res.status).toBe(200)
+		expect(res.body).toStrictEqual(expectedResponse)
 	})
 })
