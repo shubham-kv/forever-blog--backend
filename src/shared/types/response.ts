@@ -9,7 +9,7 @@ export type ErrorResponse = {
 	error: string
 }
 
-export type SuccessResponse<T> = {
-	success: true
-	data: T | unknown
+export type SuccessResponse<T = unknown> = {
+	success: boolean
+	data: T
 }
