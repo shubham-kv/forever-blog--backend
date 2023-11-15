@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import {tokenConfig} from '../../configs'
-import {SERVER_ERROR_MESSAGE} from 'src/shared/constants'
+import {SERVER_ERROR_MESSAGE} from '../../shared/constants'
 
 type LoginResponse = {
 	accessToken: string
