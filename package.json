@@ -1,6 +1,6 @@
 {
 	"name": "forever-blog-backend",
-	"version": "1.0.0",
+	"version": "0.1",
 	"description": "Backend server for forever blog",
 	"main": "src/server.ts",
 	"scripts": {
@@ -25,6 +25,7 @@
 		"rimraf": "^4.4.0"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^8.3.1",
 		"@types/compression": "^1.7.2",
 		"@types/express": "^4.17.17",
 		"@types/jest": "^29.5.6",
