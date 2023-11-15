@@ -1,13 +1,11 @@
 import jwt from 'jsonwebtoken'
+
 import {tokenConfig} from '../../configs'
+import {LoginServiceResponse} from './types'
+
 import {SERVER_ERROR_MESSAGE} from '../../shared/constants'
 
-type LoginResponse = {
-	accessToken: string
-	refreshToken: string
-}
-
-export async function login(user: {id: string}): Promise<LoginResponse> {
+export async function login(user: {id: string}): Promise<LoginServiceResponse> {
 	const userId = user?.id
 
 	if (!userId) {
