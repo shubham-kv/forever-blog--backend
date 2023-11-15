@@ -3,31 +3,16 @@ import type {Request, Response} from 'express'
 import * as UsersService from './users.service'
 import {CreateUserDto} from './dto'
 
-import type {SuccessResult, ErrorResult} from '../../shared/types'
+import {buildSuccessResponse, build500Response} from '../../utils'
 
 export async function createUser(req: Request, res: Response) {
 	const createUserDto: CreateUserDto = req.body as CreateUserDto
-	let createUserResult: any
 
 	try {
-		createUserResult = await UsersService.createUser(createUserDto)
-
-		if (!createUserResult.success) {
-			throw new Error('Internal Server Error')
-		}
+		const createUserResponse = await UsersService.createUser(createUserDto)
+		return res.status(201).json(buildSuccessResponse(createUserResponse))
 	} catch (e: any) {
-		const result: ErrorResult = {
-			success: false,
-			error: e.message
-		}
-
-		return res.status(500).json(result)
+		console.error(e)
+		return res.status(500).json(build500Response())
 	}
-
-	const result: SuccessResult<any> = {
-		success: true,
-		data: createUserResult.data
-	}
-
-	return res.status(200).json(result)
 }

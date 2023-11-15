@@ -3,7 +3,7 @@ import compression from 'compression'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 
-import {postsRouter, usersRoute} from './modules'
+import {postsRouter, usersRouter} from './modules'
 
 const app = express()
 
@@ -27,6 +27,6 @@ app.get('/hello', (_, res) => {
 })
 
 app.use('/posts', postsRouter)
-app.use('/users', usersRoute)
+app.use('/users', usersRouter)
 
 export default app

@@ -2,46 +2,30 @@ import {CreateUserDto} from './dto'
 import {UserEntity} from './user.entity'
 import {User} from './user.model'
 
-import type {Result} from '../../shared/types'
-
-type SuccessResult = Result<{user: UserEntity}, undefined>
-type ErrorResult = Result<undefined, string>
+import type {CreateUserResponse} from './types'
 
 export async function createUser(
 	data: CreateUserDto
-): Promise<SuccessResult | ErrorResult> {
+): Promise<CreateUserResponse> {
 	const {firstName, lastName, email, password} = data
 
-	const userDocument = new User({
+	const document = new User({
 		firstName,
 		lastName,
 		email,
 		password
 	})
 
-	try {
-		await userDocument.save()
-	} catch (e: any) {
-		const result: ErrorResult = {
-			success: false,
-			error: e.message()
-		}
-		return result
-	}
+	await document.save()
 
-	const user = new UserEntity({
-		id: userDocument._id.toString(),
-		firstName,
-		lastName,
-		email
+	const userEntity = new UserEntity({
+		id: document._id.toString(),
+		firstName: document.firstName,
+		lastName: document.lastName,
+		email: document.email
 	})
 
-	const result: SuccessResult = {
-		success: true,
-		data: {
-			user
-		}
+	return {
+		user: userEntity
 	}
-
-	return result
 }

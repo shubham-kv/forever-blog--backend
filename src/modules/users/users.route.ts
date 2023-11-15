@@ -1,8 +1,18 @@
 import {Router} from 'express'
 
-import {createUser} from './users.controller'
-import {createUserBodyValidator} from './middlewares'
+import * as UsersController from './users.controller'
 
-export const usersRoute = Router()
+import {
+	createUserSchemaValidator,
+	createUserUniqueEmailValidator
+} from './middlewares'
 
-usersRoute.route('/').post(createUserBodyValidator, createUser)
+export const usersRouter = Router()
+
+usersRouter
+	.route('/')
+	.post(
+		createUserSchemaValidator,
+		createUserUniqueEmailValidator,
+		UsersController.createUser
+	)

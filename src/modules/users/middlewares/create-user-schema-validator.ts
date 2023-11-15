@@ -2,9 +2,9 @@ import type {NextFunction, Request, Response} from 'express'
 import {schemaValidator} from '../../../shared/middlewares'
 import {CreateUserJoiSchema} from '../joi-schema'
 
-import type {ErrorResult} from '../../../shared/types'
+import {buildErrorResponse} from '../../../utils'
 
-export function createUserBodyValidator(
+export function createUserSchemaValidator(
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -14,11 +14,7 @@ export function createUserBodyValidator(
 		schema: CreateUserJoiSchema,
 		onSuccess: next,
 		onFailure(error) {
-			const result: ErrorResult = {
-				success: false,
-				error: error
-			}
-			return res.status(400).json(result)
+			return res.status(400).json(buildErrorResponse(error))
 		}
 	})
 }
