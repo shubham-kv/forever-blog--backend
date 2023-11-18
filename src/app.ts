@@ -2,6 +2,7 @@ import express from 'express'
 import compression from 'compression'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
+import cookieParser from 'cookie-parser'
 
 import {authRouter, postsRouter, usersRouter} from './modules'
 
@@ -18,6 +19,7 @@ app.use(
 	})
 )
 
+app.use(cookieParser())
 app.use(express.json())
 
 app.disable('x-powered-by')
