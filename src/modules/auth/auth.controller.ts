@@ -9,17 +9,15 @@ import {REFRESH_TOKEN_COOKIE} from './constants'
 
 export async function login(req: Request, res: Response) {
 	try {
-		const {accessToken, refreshToken} = await AuthService.login(
-			(req as any).user
-		)
+		const tokens = await AuthService.login(req.user!)
 
 		const response: LoginControllerResponse = {
-			token: accessToken
+			token: tokens.accessToken
 		}
 
 		return res
 			.status(200)
-			.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
+			.cookie(REFRESH_TOKEN_COOKIE, tokens.refreshToken, {
 				secure: true,
 				httpOnly: true,
 				maxAge: Date.now() + 24 * 60 * 60 * 1000

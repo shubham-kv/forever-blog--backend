@@ -19,7 +19,7 @@ export async function loginCredentialsValidator(
 		const isPasswordValid = await bcrypt.compare(password, user.password)
 
 		if (isPasswordValid) {
-			;(req as any).user = {
+			req.user = {
 				id: user._id.toString()
 			}
 			return next()
