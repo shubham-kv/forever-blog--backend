@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
 
-import {User} from '../src/modules'
+import {User} from '../src/shared/modules/user'
 import {usersData} from './users/data'
 
 export const initiateDbConnection = async () => {

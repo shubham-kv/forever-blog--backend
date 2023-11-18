@@ -9,7 +9,8 @@ import {REFRESH_TOKEN_COOKIE} from './constants'
 
 export async function login(req: Request, res: Response) {
 	try {
-		const tokens = await AuthService.login(req.user!)
+		const userId = req.user!.id
+		const tokens = await AuthService.login(userId)
 
 		const response: AuthControllerResponse = {
 			token: (tokens).accessToken
@@ -31,7 +32,8 @@ export async function login(req: Request, res: Response) {
 
 export async function refresh(req: Request, res: Response) {
 	try {
-		const tokens = await AuthService.refresh(req.user!)
+		const userId = req.user!.id
+		const tokens = await AuthService.refresh(userId)
 
 		const response: AuthControllerResponse = {
 			token: tokens.accessToken

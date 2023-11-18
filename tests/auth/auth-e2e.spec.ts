@@ -8,7 +8,7 @@ import app from '../../src/app'
 import {LoginDto} from '../../src/modules/auth/dto'
 import {AuthControllerResponse} from '../../src/modules/auth/types'
 import {CreateUserDto} from '../../src/modules/users/dto'
-import {User} from '../../src/modules/users'
+import {User} from '../../src/shared/modules/user'
 import {SuccessResponse} from '../../src/shared/types'
 
 import {
@@ -119,6 +119,34 @@ describe('POST /auth/refresh', () => {
 		const res = await request
 			.post('/auth/refresh')
 			.set('Cookie', [`${REFRESH_TOKEN_COOKIE}=${randomString}`])
+
+		expect(res.status).toBe(401)
+		expect(res.headers['content-type']).toMatch(/json/)
+		expect(res.body).toStrictEqual(errorResponse)
+	})
+
+	it('throws a 401 for a user which has been removed from the database', async () => {
+		const user = existingUsers[existingUsers.length - 1]
+		const loginDto: LoginDto = {
+			email: user.email,
+			password: user.password
+		}
+
+		// proceed under the assumption that the login API works fine
+		const loginRes = await request.post('/auth/login').send(loginDto)
+		expect(loginRes.headers['set-cookie']).toBeDefined()
+		expect(loginRes.headers['set-cookie']).toHaveLength(1)
+		expect(loginRes.headers['set-cookie'][0]).toBeDefined()
+
+		// remove the user from the database
+		await User.deleteOne({email: user.email})
+
+		const refreshCookie = loginRes.headers['set-cookie'][0]
+
+		// make the request
+		const res = await request
+			.post('/auth/refresh')
+			.set('Cookie', [refreshCookie])
 
 		expect(res.status).toBe(401)
 		expect(res.headers['content-type']).toMatch(/json/)
