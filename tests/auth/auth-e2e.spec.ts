@@ -11,10 +11,8 @@ import {CreateUserDto} from '../../src/modules/users/dto'
 import {User} from '../../src/shared/modules/user'
 import {SuccessResponse} from '../../src/shared/types'
 
-import {
-	REFRESH_TOKEN_COOKIE,
-	UNAUTHORIZED_MESSAGE
-} from '../../src/modules/auth/constants'
+import {REFRESH_TOKEN_COOKIE} from '../../src/modules/auth/constants'
+import {UNAUTHORIZED_MESSAGE} from '../../src/shared/constants'
 
 import {setup} from '../setup'
 

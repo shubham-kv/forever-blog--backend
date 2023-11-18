@@ -5,7 +5,8 @@ import {User, UserEntity} from '../../../../src/shared/modules/user'
 import {tokenConfig} from '../../../configs'
 import {buildErrorResponse} from '../../../utils'
 
-import {REFRESH_TOKEN_COOKIE, UNAUTHORIZED_MESSAGE} from '../constants'
+import {REFRESH_TOKEN_COOKIE} from '../constants'
+import {UNAUTHORIZED_MESSAGE} from '../../../shared/constants'
 
 export async function refreshGuard(
 	req: Request,
