@@ -3,29 +3,16 @@ import {Request, Response} from 'express'
 import * as PostsService from './posts.service'
 import {CreatePostDto} from './dto'
 
-import {Result} from '../../shared/types'
+import {build500Response, buildSuccessResponse} from '../../utils'
 
 export async function createPost(req: Request, res: Response) {
 	const payload: CreatePostDto = req.body
 
-	let status = 500
-	let result: Result<any, any> = {
-		success: false
-	}
-
 	try {
-		result = await PostsService.createPost(payload)
-
-		if (result.success) {
-			status = 201
-		} else {
-			status = 400
-		}
-	} catch (e: any) {
-		result.success = false
-		result.error = e.message
-		console.log(e)
-	} finally {
-		return res.status(status).json(result)
+		const createPostResult = await PostsService.createPost(payload)
+		return res.status(201).json(buildSuccessResponse(createPostResult))
+	} catch (e) {
+		console.error(e)
+		return res.status(500).json(build500Response())
 	}
 }
