@@ -1,15 +1,20 @@
 import 'dotenv/config'
 import supertest from 'supertest'
 import {faker} from '@faker-js/faker'
+import crypto from 'crypto'
 
 import app from '../../src/app'
 
 import {LoginDto} from '../../src/modules/auth/dto'
-import {LoginControllerResponse} from '../../src/modules/auth/types'
+import {AuthControllerResponse} from '../../src/modules/auth/types'
 import {CreateUserDto} from '../../src/modules/users/dto'
-import {User} from '../../src/modules'
+import {User} from '../../src/modules/users'
 import {SuccessResponse} from '../../src/shared/types'
-import {REFRESH_TOKEN_COOKIE} from '../../src/modules/auth/constants'
+
+import {
+	REFRESH_TOKEN_COOKIE,
+	UNAUTHORIZED_MESSAGE
+} from '../../src/modules/auth/constants'
 
 import {setup} from '../setup'
 
@@ -41,7 +46,7 @@ describe('POST /auth/login', () => {
 
 	it('throws 400 for incorrect credentials', async () => {
 		await Promise.all(
-			existingUsers.map(async existingUser => {
+			existingUsers.map(async (existingUser) => {
 				const loginData: LoginDto = {
 					email: existingUser.email,
 					password: faker.internet.password()
@@ -73,7 +78,7 @@ describe('POST /auth/login', () => {
 			password: createUserDto.password
 		}
 
-		const expectedResponse: SuccessResponse<LoginControllerResponse> = {
+		const expectedResponse: SuccessResponse<AuthControllerResponse> = {
 			success: true,
 			data: {
 				token: expect.stringMatching(/.*/)
@@ -84,10 +89,70 @@ describe('POST /auth/login', () => {
 		const res = await request.post('/auth/login').send(loginData)
 
 		expect(res.status).toBe(200)
+		expect(res.headers['set-cookie']).toBeDefined()
+		expect(res.headers['set-cookie']).toHaveLength(1)
 		expect(res.headers['set-cookie'][0]).toBeDefined()
 		expect(res.headers['set-cookie'][0]).toContain(REFRESH_TOKEN_COOKIE)
 		expect(res.headers['set-cookie'][0]).toMatch(/httponly/i)
 		expect(res.headers['set-cookie'][0]).toMatch(/secure/i)
 		expect(res.body).toStrictEqual(expectedResponse)
+	})
+})
+
+describe('POST /auth/refresh', () => {
+	const errorResponse = {
+		success: false,
+		error: UNAUTHORIZED_MESSAGE
+	}
+
+	it('throws a 401 for a request with no refresh token', async () => {
+		const res = await request.post('/auth/refresh')
+
+		expect(res.status).toBe(401)
+		expect(res.headers['content-type']).toMatch(/json/)
+		expect(res.body).toStrictEqual(errorResponse)
+	})
+
+	it('throws a 401 for any random string passed as refresh token', async () => {
+		const randomString = crypto.randomBytes(8).toString('hex')
+
+		const res = await request
+			.post('/auth/refresh')
+			.set('Cookie', [`${REFRESH_TOKEN_COOKIE}=${randomString}`])
+
+		expect(res.status).toBe(401)
+		expect(res.headers['content-type']).toMatch(/json/)
+		expect(res.body).toStrictEqual(errorResponse)
+	})
+
+	it('generates & sends a token for a request with valid refresh token', async () => {
+		const user = existingUsers[0]
+		const loginDto: LoginDto = {
+			email: user.email,
+			password: user.password
+		}
+
+		const expectedRefreshResponse: SuccessResponse<AuthControllerResponse> = {
+			success: true,
+			data: {
+				token: expect.stringMatching(/.*/)
+			}
+		}
+
+		// proceed under the assumption that the login API works fine
+		const loginRes = await request.post('/auth/login').send(loginDto)
+		expect(loginRes.headers['set-cookie']).toBeDefined()
+		expect(loginRes.headers['set-cookie']).toHaveLength(1)
+		expect(loginRes.headers['set-cookie'][0]).toBeDefined()
+
+		const refreshCookie = loginRes.headers['set-cookie'][0]
+
+		const res = await request
+			.post('/auth/refresh')
+			.set('Cookie', [refreshCookie])
+
+		expect(res.status).toBe(200)
+		expect(res.headers['content-type']).toMatch(/json/)
+		expect(res.body).toStrictEqual(expectedRefreshResponse)
 	})
 })
