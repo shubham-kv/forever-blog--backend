@@ -125,6 +125,34 @@ describe('POST /auth/refresh', () => {
 		expect(res.body).toStrictEqual(errorResponse)
 	})
 
+	it('throws a 401 for a user which has been removed from the database', async () => {
+		const user = existingUsers[existingUsers.length - 1]
+		const loginDto: LoginDto = {
+			email: user.email,
+			password: user.password
+		}
+
+		// proceed under the assumption that the login API works fine
+		const loginRes = await request.post('/auth/login').send(loginDto)
+		expect(loginRes.headers['set-cookie']).toBeDefined()
+		expect(loginRes.headers['set-cookie']).toHaveLength(1)
+		expect(loginRes.headers['set-cookie'][0]).toBeDefined()
+
+		// remove the user from the database
+		await User.deleteOne({email: user.email})
+
+		const refreshCookie = loginRes.headers['set-cookie'][0]
+
+		// make the request
+		const res = await request
+			.post('/auth/refresh')
+			.set('Cookie', [refreshCookie])
+
+		expect(res.status).toBe(401)
+		expect(res.headers['content-type']).toMatch(/json/)
+		expect(res.body).toStrictEqual(errorResponse)
+	})
+
 	it('generates & sends a token for a request with valid refresh token', async () => {
 		const user = existingUsers[0]
 		const loginDto: LoginDto = {
