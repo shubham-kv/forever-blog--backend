@@ -23,7 +23,7 @@ export async function login(req: Request, res: Response) {
 				maxAge: Date.now() + 24 * 60 * 60 * 1000
 			})
 			.json(buildSuccessResponse(response))
-	} catch (e: any) {
+	} catch (e) {
 		console.error(e)
 		return res.status(500).json(build500Response())
 	}
