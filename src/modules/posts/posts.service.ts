@@ -1,4 +1,4 @@
-import {Post, PostEntity} from '..'
+import {Post} from '..'
 import {User} from '../../shared/modules/user'
 
 import {CreatePostDto} from './dto'
@@ -20,14 +20,12 @@ export async function createPost(
 	await userDocument?.save()
 
 	const {id, title, content} = postDocument
-	const postEntity = new PostEntity({
-		id,
-		title,
-		content,
-		userId
-	})
 
 	return {
-		post: postEntity
+		post: {
+			id,
+			title,
+			content
+		}
 	}
 }
