@@ -1,19 +1,30 @@
-import {Request, Response} from 'express'
+import {Request, RequestHandler} from 'express'
 
-import * as PostsService from './posts.service'
+import * as postsService from './posts.service'
 import {CreatePostDto} from './dto'
 
-import {build500Response, buildSuccessResponse} from '../../utils'
+import {buildSuccessResponse} from '../../utils'
 
-export async function createPost(req: Request, res: Response) {
+import {SuccessResponse} from '../../shared/types'
+import {CreatePostResponse, GetPostsResponse} from './types'
+
+type CreatePostResBody = SuccessResponse<CreatePostResponse>
+type CreatePostHandler = RequestHandler<unknown, CreatePostResBody>
+
+type GetPostsResBody = SuccessResponse<GetPostsResponse>
+type GetPostsHandler = RequestHandler<unknown, GetPostsResBody>
+
+export const createPost: CreatePostHandler = async (req, res) => {
 	const payload: CreatePostDto = req.body
-	const userId = req.user!.id
+	const userId = (req as Request).user!.id
+	const createPostResult = await postsService.createPost(payload, userId)
 
-	try {
-		const createPostResult = await PostsService.createPost(payload, userId)
-		return res.status(201).json(buildSuccessResponse(createPostResult))
-	} catch (e) {
-		console.error(e)
-		return res.status(500).json(build500Response())
-	}
+	res.status(201).json(buildSuccessResponse(createPostResult))
+}
+
+export const getPosts: GetPostsHandler = async (req, res) => {
+	const userId = (req as Request).user!.id
+	const createPostResult = await postsService.getPosts(userId)
+
+	res.status(200).json(buildSuccessResponse(createPostResult))
 }

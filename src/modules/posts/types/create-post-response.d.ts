@@ -1,5 +1,5 @@
-import {PostEntity} from '../post.entity'
+import {Post} from './post'
 
 export type CreatePostResponse = {
-	post: Pick<PostEntity, 'id' | 'title' | 'content'>
+	post: Post
 }

@@ -2,7 +2,9 @@ import {Post} from '..'
 import {User} from '../../shared/modules/user'
 
 import {CreatePostDto} from './dto'
-import {CreatePostResponse} from './types'
+
+import {InternalServerError} from '../../shared/errors'
+import {CreatePostResponse, GetPostsResponse} from './types'
 
 export async function createPost(
 	createPostDto: CreatePostDto,
@@ -27,5 +29,18 @@ export async function createPost(
 			title,
 			content
 		}
+	}
+}
+
+export async function getPosts(userId: string): Promise<GetPostsResponse> {
+	if (!userId) {
+		throw new InternalServerError()
+	}
+
+	const rawPosts = await Post.find({userId})
+	const posts = rawPosts.map(({id, title, content}) => ({id, title, content}))
+
+	return {
+		posts
 	}
 }
