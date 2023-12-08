@@ -1,4 +1,4 @@
-import {Post} from '..'
+import {Post} from '../../shared/modules/post'
 
 import {CreatePostDto} from './dto'
 
