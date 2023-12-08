@@ -1,12 +1,14 @@
 # compiled output
-node_modules
-build
-coverage
-
-# compiled output
 build
 dist
+node_modules
+coverage
 
-# config files at the root level
+# IDEs
+.vscode
+
+# configs
 *.js
 *.json
+
+README.md
