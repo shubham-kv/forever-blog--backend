@@ -4,9 +4,6 @@ dist
 node_modules
 coverage
 
-# env
-.env
-
 # IDEs
 .vscode
 
