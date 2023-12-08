@@ -13,7 +13,7 @@ export async function login(req: Request, res: Response) {
 		const tokens = await AuthService.login(userId)
 
 		const response: AuthControllerResponse = {
-			token: (tokens).accessToken
+			token: tokens.accessToken
 		}
 
 		return res
@@ -39,9 +39,7 @@ export async function refresh(req: Request, res: Response) {
 			token: tokens.accessToken
 		}
 
-		return res
-			.status(200)
-			.json(buildSuccessResponse(response))
+		return res.status(200).json(buildSuccessResponse(response))
 	} catch (e) {
 		console.error(e)
 		return res.status(500).json(build500Response())
