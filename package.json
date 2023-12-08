@@ -9,8 +9,8 @@
 		"build": "tsc --build",
 		"start": "node build/src/index",
 		"dev": "ts-node-dev src/index",
-		"lint": "eslint \"{src,tests}/**/*\" --fix",
-		"format": "prettier --write src/**",
+		"lint": "eslint . --fix",
+		"format": "prettier --write .",
 		"test": "cross-env NODE_ENV=test jest --testTimeout=5000",
 		"test:watch": "cross-env NODE_ENV=test jest --watch",
 		"test:cov": "cross-env NODE_ENV=test jest --coverage",
@@ -31,7 +31,8 @@
 		"rimraf": "^4.4.0"
 	},
 	"lint-staged": {
-		"./{src,tests}/**/*.ts": [
+		"*.{js,ts}": [
+			"prettier --write",
 			"eslint --fix"
 		]
 	},
