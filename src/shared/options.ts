@@ -6,5 +6,6 @@ export const joiSchemaValidationOptions: Joi.ValidationOptions = {
 		wrap: {
 			label: ''
 		}
-	}
+	},
+	stripUnknown: true
 }
