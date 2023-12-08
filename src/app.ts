@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit'
 import cookieParser from 'cookie-parser'
 
 import {authRouter, postsRouter, usersRouter} from './modules'
-import {errorHandler} from './shared/middlewares'
+import {errorHandler, unknownRequestHandler} from './shared/middlewares'
 
 const app = express()
 
@@ -37,6 +37,7 @@ app.use('/auth', authRouter)
 app.use('/posts', postsRouter)
 app.use('/users', usersRouter)
 
+app.use('*', unknownRequestHandler)
 app.use(errorHandler)
 
 export default app
