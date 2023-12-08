@@ -7,7 +7,8 @@ import {
 	CreatePostHandler,
 	GetPostsHandler,
 	GetPostHandler,
-	UpdatePostHandler
+	UpdatePostHandler,
+	DeletePostHandler
 } from './types'
 
 export const createPost: CreatePostHandler = async (req, res) => {
@@ -42,4 +43,12 @@ export const updatePost: UpdatePostHandler = async (req, res) => {
 	)
 
 	res.status(200).json(buildSuccessResponse(updatePostResult))
+}
+
+export const deletePost: DeletePostHandler = async (req, res) => {
+	const postId = req.params.id
+	const userId = (req as Request).user!.id
+	const deletePostResult = await postsService.deletePost(userId, postId)
+
+	res.status(200).json(buildSuccessResponse(deletePostResult))
 }
