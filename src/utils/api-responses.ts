@@ -1,9 +1,7 @@
 import {SERVER_ERROR_MESSAGE} from '../shared/constants'
 import {ErrorResponse, SuccessResponse} from '../shared/types'
 
-export const buildSuccessResponse = (
-	data: unknown
-): SuccessResponse<unknown> => ({
+export const buildSuccessResponse = <T>(data: T): SuccessResponse<T> => ({
 	success: true,
 	data: data
 })

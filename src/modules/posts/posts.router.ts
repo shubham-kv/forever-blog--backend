@@ -1,12 +1,26 @@
 import {Router} from 'express'
 
 import {authGuard} from '../../shared/middlewares'
-import {createPostBodyValidator} from './middlewares'
-import {createPost} from './posts.controller'
+import {createPostBodyValidator, getPostParamValidator} from './middlewares'
+import * as postsController from './posts.controller'
+
+import {requestWrapper} from '../../utils'
 
 export const postsRouter = Router()
 
-// prettier-ignore
 postsRouter
 	.route('/')
-	.post(authGuard, createPostBodyValidator, createPost)
+	.post(
+		requestWrapper(authGuard),
+		requestWrapper(createPostBodyValidator),
+		requestWrapper(postsController.createPost)
+	)
+	.get(requestWrapper(authGuard), requestWrapper(postsController.getPosts))
+
+postsRouter
+	.route('/:id')
+	.get(
+		requestWrapper(authGuard),
+		requestWrapper(getPostParamValidator),
+		requestWrapper(postsController.getPost as never)
+	)
