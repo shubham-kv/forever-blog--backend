@@ -1,42 +1,43 @@
 import jwt, {JwtPayload} from 'jsonwebtoken'
-import type {NextFunction, Request, Response} from 'express'
+import type {Request, RequestHandler} from 'express'
 
 import {User, UserEntity} from '../../../../src/shared/modules/user'
 import {tokenConfig} from '../../../configs'
-import {buildErrorResponse} from '../../../utils'
 
 import {REFRESH_TOKEN_COOKIE} from '../constants'
-import {UNAUTHORIZED_MESSAGE} from '../../../shared/constants'
+import {UnauthorizedError} from '../../../shared/errors'
 
-export async function refreshGuard(
+export const refreshGuard: RequestHandler = async (
 	req: Request,
-	res: Response,
-	next: NextFunction
-) {
+	_res,
+	next
+) => {
 	const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE]
 
 	if (!refreshToken) {
-		return res.status(401).json(buildErrorResponse(UNAUTHORIZED_MESSAGE))
+		throw new UnauthorizedError()
 	}
 
+	let decoded: JwtPayload
+
 	try {
-		const decoded = jwt.verify(
+		decoded = jwt.verify(
 			refreshToken,
 			tokenConfig.refreshTokenSecret
 		) as JwtPayload
-
-		const userId = decoded.sub
-		const userDocument = await User.findById(userId)
-
-		if (!userDocument) {
-			return res.status(401).json(buildErrorResponse(UNAUTHORIZED_MESSAGE))
-		}
-
-		const {id, firstName, lastName, email} = userDocument
-		req.user = new UserEntity({id, firstName, lastName, email})
-
-		return next()
-	} catch (e) {
-		return res.status(401).json(buildErrorResponse(UNAUTHORIZED_MESSAGE))
+	} catch {
+		throw new UnauthorizedError()
 	}
+
+	const userId = decoded.sub
+	const userDocument = await User.findById(userId)
+
+	if (!userDocument) {
+		throw new UnauthorizedError()
+	}
+
+	const {id, firstName, lastName, email} = userDocument
+	req.user = new UserEntity({id, firstName, lastName, email})
+
+	next()
 }
