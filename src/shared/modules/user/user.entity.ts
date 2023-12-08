@@ -4,7 +4,6 @@ export class UserEntity {
 	lastName: string
 	email: string
 	password?: string
-	posts?: string[]
 
 	constructor(user: UserEntity) {
 		Object.assign(this, user)

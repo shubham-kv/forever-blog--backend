@@ -1,5 +1,4 @@
 import {Post} from '..'
-import {User} from '../../shared/modules/user'
 
 import {CreatePostDto} from './dto'
 
@@ -15,11 +14,6 @@ export async function createPost(
 		userId
 	})
 	await postDocument.save()
-
-	const userDocument = await User.findById(userId)
-	userDocument?.posts.push(postDocument._id)
-
-	await userDocument?.save()
 
 	const {id, title, content} = postDocument
 
