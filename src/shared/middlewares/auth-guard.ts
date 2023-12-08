@@ -1,44 +1,36 @@
-import jwt, {JwtPayload} from 'jsonwebtoken'
-import type {NextFunction, Request, Response} from 'express'
+import jwt from 'jsonwebtoken'
+import type {Request, RequestHandler} from 'express'
 
 import {User, UserEntity} from '../../shared/modules/user'
 import {tokenConfig} from '../../configs'
-import {buildErrorResponse} from '../../utils'
 
-import {UNAUTHORIZED_MESSAGE} from '../constants'
+import {NotFoundError, UnauthorizedError} from '../errors'
 
-export async function authGuard(
-	req: Request,
-	res: Response,
-	next: NextFunction
-) {
+export const authGuard: RequestHandler = async (req: Request, _res, next) => {
 	const authHeader = req.headers.authorization
 	const matchesPattern = authHeader ? /^Bearer [^\s]+$/.test(authHeader) : false
 
 	if (!matchesPattern) {
-		return res.status(401).json(buildErrorResponse(UNAUTHORIZED_MESSAGE))
+		throw new UnauthorizedError()
 	}
 
 	const token = authHeader?.split(' ')[1]
 
 	try {
-		const decoded = jwt.verify(
-			token as string,
-			tokenConfig.accessTokenSecret
-		) as JwtPayload
+		const decoded = jwt.verify(token as string, tokenConfig.accessTokenSecret)
 
-		const userId = decoded.sub!
+		const userId = decoded.sub
 		const userDocument = await User.findById(userId)
 
 		if (!userDocument) {
-			return res.status(401).json(buildErrorResponse(UNAUTHORIZED_MESSAGE))
+			throw new NotFoundError()
 		}
 
 		const {id, firstName, lastName, email} = userDocument
 		req.user = new UserEntity({id, firstName, lastName, email})
 
-		return next()
+		next()
 	} catch (e) {
-		return res.status(401).json(buildErrorResponse(UNAUTHORIZED_MESSAGE))
+		throw new UnauthorizedError()
 	}
 }
