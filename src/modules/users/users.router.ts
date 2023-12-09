@@ -7,14 +7,14 @@ import {
 	createUserUniqueEmailValidator
 } from './middlewares'
 
-import {middlewareWrapper} from '../../utils'
+import {applyMiddlewareWrapper} from '../../utils'
 
 export const usersRouter = Router()
 
-usersRouter
-	.route('/')
-	.post(
-		middlewareWrapper(createUserSchemaValidator),
-		middlewareWrapper(createUserUniqueEmailValidator),
-		middlewareWrapper(usersController.createUser)
-	)
+const createUserMiddlewares = applyMiddlewareWrapper(
+	createUserSchemaValidator,
+	createUserUniqueEmailValidator,
+	usersController.createUser
+)
+
+usersRouter.route('/').post(...createUserMiddlewares)
