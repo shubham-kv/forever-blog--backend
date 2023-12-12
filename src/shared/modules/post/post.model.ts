@@ -11,7 +11,7 @@ export const PostSchema = new Schema(
 			type: String,
 			required: true
 		},
-		userId: {
+		author: {
 			type: Schema.Types.ObjectId,
 			required: true,
 			ref: 'User'
