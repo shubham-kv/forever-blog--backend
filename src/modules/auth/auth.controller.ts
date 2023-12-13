@@ -3,7 +3,13 @@ import type {Request} from 'express'
 import * as authService from './auth.service'
 
 import {buildSuccessResponse} from '../../utils'
-import {AuthResponse, LoginHandler, RefreshHandler} from './types'
+
+import {
+	AuthResponse,
+	LoginHandler,
+	LoginResponse,
+	RefreshHandler
+} from './types'
 
 import {REFRESH_TOKEN_COOKIE} from './constants'
 
@@ -11,8 +17,9 @@ export const login: LoginHandler = async (req, res) => {
 	const userId = (req as Request).user!.id
 	const tokens = await authService.login(userId)
 
-	const response: AuthResponse = {
-		token: tokens.accessToken
+	const response: LoginResponse = {
+		token: tokens.accessToken,
+		user: req.user!
 	}
 
 	res
