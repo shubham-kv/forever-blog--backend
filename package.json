@@ -17,7 +17,7 @@
 		"prepare": "husky install"
 	},
 	"dependencies": {
-		"bcrypt": "^5.1.1",
+		"bcryptjs": "^2.4.3",
 		"compression": "^1.7.4",
 		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
@@ -42,6 +42,7 @@
 	"devDependencies": {
 		"@faker-js/faker": "^8.3.1",
 		"@types/bcrypt": "^5.0.2",
+		"@types/bcryptjs": "^2.4.6",
 		"@types/compression": "^1.7.2",
 		"@types/cookie-parser": "^1.4.6",
 		"@types/cors": "^2.8.17",
