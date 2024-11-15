@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import supertest from 'supertest'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import {faker} from '@faker-js/faker'
 
 import app from '../../src/app'

@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import type {Request} from 'express'
 
 import {User, UserEntity} from '../../../shared/modules/user'

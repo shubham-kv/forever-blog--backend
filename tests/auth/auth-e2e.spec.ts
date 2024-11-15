@@ -6,7 +6,7 @@ import crypto from 'crypto'
 import app from '../../src/app'
 
 import {LoginDto} from '../../src/modules/auth/dto'
-import {AuthResponse} from '../../src/modules/auth/types'
+import {AuthResponse, LoginResponse} from '../../src/modules/auth/types'
 import {CreateUserDto} from '../../src/modules/users/dto'
 import {User} from '../../src/shared/modules/user'
 import {SuccessResponse} from '../../src/shared/types'
@@ -76,10 +76,16 @@ describe('POST /auth/login', () => {
 			password: createUserDto.password
 		}
 
-		const expectedResponse: SuccessResponse<AuthResponse> = {
+		const expectedResponse: SuccessResponse<LoginResponse> = {
 			success: true,
 			data: {
-				token: expect.stringMatching(/.*/)
+				token: expect.stringMatching(/.*/),
+				user: {
+					id: expect.stringMatching(/.*/),
+					firstName: createUserDto.firstName,
+					lastName: createUserDto.lastName,
+					email: createUserDto.email
+				}
 			}
 		}
 

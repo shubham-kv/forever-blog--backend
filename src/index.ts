@@ -6,7 +6,7 @@ import {connectToMongo} from './loaders'
 async function bootstrap() {
 	const {port} = appConfig
 
-	await connectToMongo()
+	connectToMongo()
 
 	app.listen(port, () => {
 		console.log(`\nServer running at http://localhost:${port}/\n`)
