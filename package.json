@@ -6,9 +6,9 @@
 	"scripts": {
 		"clean": "rimraf build",
 		"prebuild": "npm run clean",
-		"build": "tsc --build",
-		"start": "node build/src/index",
-		"dev": "ts-node-dev src/index",
+		"build": "tsc -p ./tsconfig.build.json",
+		"start": "node build",
+		"dev": "ts-node-dev --files src",
 		"lint": "eslint . --fix",
 		"format": "prettier --write .",
 		"test": "cross-env NODE_ENV=test jest --testTimeout=5000",
