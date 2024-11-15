@@ -35,3 +35,8 @@ postsRouter
 		requestWrapper(updatePostBodyValidator),
 		requestWrapper(postsController.updatePost as never)
 	)
+	.delete(
+		requestWrapper(authGuard),
+		requestWrapper(paramWithIdValidator),
+		requestWrapper(postsController.deletePost as never)
+	)

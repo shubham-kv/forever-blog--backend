@@ -20,10 +20,6 @@ export type GetPostResponse = {
 	post: Post
 }
 
-export type UpdatePostResponse = {
-	post: Post
-}
-
 type CreatePostResBody = SuccessResponse<CreatePostResponse>
 export type CreatePostHandler = RequestHandler<
 	unknown,
@@ -37,9 +33,12 @@ export type GetPostsHandler = RequestHandler<unknown, GetPostsResBody>
 type GetPostResBody = SuccessResponse<GetPostResponse>
 export type GetPostHandler = RequestHandler<ParamsWithId, GetPostResBody>
 
-type UpdatePostResBody = SuccessResponse<UpdatePostResponse>
+type UpdatePostResBody = SuccessResponse<GetPostResponse>
 export type UpdatePostHandler = RequestHandler<
 	ParamsWithId,
 	UpdatePostResBody,
 	UpdatePostDto
 >
+
+type DeletePostResBody = SuccessResponse<GetPostResponse>
+export type DeletePostHandler = RequestHandler<ParamsWithId, DeletePostResBody>

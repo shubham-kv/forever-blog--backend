@@ -48,8 +48,7 @@ export async function getPost(
 		throw new InternalServerError()
 	}
 
-	const postDocuments = await Post.find({userId})
-	const postDocument = postDocuments.find((post) => post.id === postId)
+	const postDocument = await Post.findOne({_id: postId, userId})
 
 	if (!postDocument) {
 		throw new NotFoundError()
@@ -72,29 +71,47 @@ export async function updatePost(
 		throw new InternalServerError()
 	}
 
-	const postDocument = (await Post.find({userId})).find(
-		(post) => post.id === postId
+	const {title: newTitle, content: newContent} = updatePostData
+
+	const postDocument = await Post.findOneAndUpdate(
+		{_id: postId, userId},
+		{
+			$set: {
+				...(newTitle ? {title: newTitle} : {}),
+				...(newContent ? {content: newContent} : {})
+			}
+		},
+		{new: true}
 	)
 
 	if (!postDocument) {
 		throw new NotFoundError()
 	}
 
-	const {title: newTitle, content: newContent} = updatePostData
-	let shouldSave = false
-
-	if (newTitle) {
-		postDocument.title = newTitle
-		shouldSave = true
+	const {id, title, content} = postDocument
+	const post = {
+		id,
+		title,
+		content
 	}
 
-	if (newContent) {
-		postDocument.content = newContent
-		shouldSave = true
+	return {
+		post
+	}
+}
+
+export async function deletePost(
+	userId: string,
+	postId: string
+): Promise<GetPostResponse> {
+	if (!userId || !postId) {
+		throw new InternalServerError()
 	}
 
-	if (shouldSave) {
-		await postDocument.save()
+	const postDocument = await Post.findOneAndDelete({_id: postId, userId})
+
+	if (!postDocument) {
+		throw new NotFoundError()
 	}
 
 	const {id, title, content} = postDocument
