@@ -1,8 +1,13 @@
 import {Router} from 'express'
 
-import {authGuard} from '../../shared/middlewares'
-import {createPostBodyValidator, getPostParamValidator} from './middlewares'
 import * as postsController from './posts.controller'
+import {authGuard} from '../../shared/middlewares'
+
+import {
+	createPostBodyValidator,
+	paramWithIdValidator,
+	updatePostBodyValidator
+} from './middlewares'
 
 import {requestWrapper} from '../../utils'
 
@@ -21,6 +26,17 @@ postsRouter
 	.route('/:id')
 	.get(
 		requestWrapper(authGuard),
-		requestWrapper(getPostParamValidator),
+		requestWrapper(paramWithIdValidator),
 		requestWrapper(postsController.getPost as never)
+	)
+	.patch(
+		requestWrapper(authGuard),
+		requestWrapper(paramWithIdValidator),
+		requestWrapper(updatePostBodyValidator),
+		requestWrapper(postsController.updatePost as never)
+	)
+	.delete(
+		requestWrapper(authGuard),
+		requestWrapper(paramWithIdValidator),
+		requestWrapper(postsController.deletePost as never)
 	)
