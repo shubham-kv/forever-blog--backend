@@ -32,6 +32,7 @@ app.disable('x-powered-by')
 
 app.use(
 	cors({
+		credentials: true,
 		origin: appConfig.frontendOrigin
 	})
 )

@@ -2,9 +2,7 @@ import jwt, {JwtPayload} from 'jsonwebtoken'
 import type {Request, RequestHandler} from 'express'
 
 import {User, UserEntity} from '../../../shared/modules/user'
-import {tokenConfig} from '../../../configs'
-
-import {REFRESH_TOKEN_COOKIE} from '../constants'
+import {cookieConfig, tokenConfig} from '../../../configs'
 import {UnauthorizedError} from '../../../shared/errors'
 
 export const refreshGuard: RequestHandler = async (
@@ -12,7 +10,7 @@ export const refreshGuard: RequestHandler = async (
 	_res,
 	next
 ) => {
-	const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE]
+	const refreshToken = req.cookies[cookieConfig.refreshCookieName]
 
 	if (!refreshToken) {
 		throw new UnauthorizedError()

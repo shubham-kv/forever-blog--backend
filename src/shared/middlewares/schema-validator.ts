@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import {joiSchemaValidationOptions} from '../options'
 import {BadRequestError} from '../errors'
+import {logger} from '../../modules/logger'
 
 type Properties = {
 	value: unknown
@@ -9,8 +10,8 @@ type Properties = {
 	onFailure?: (error: string) => void
 }
 
-const defaultOnFailure = (error: string) => {
-	throw new BadRequestError(error)
+const defaultOnFailure = (error: string, data?: object) => {
+	throw new BadRequestError(error, data)
 }
 
 export const schemaValidator = (props: Properties) => {
@@ -18,7 +19,11 @@ export const schemaValidator = (props: Properties) => {
 	const {error} = schema.validate(value, joiSchemaValidationOptions)
 
 	if (error) {
-		return onFailure(error.message)
+		logger.error(error)
+		return onFailure(error.message, {
+			key: error.details[0].context?.key,
+			message: error.details[0].message
+		})
 	}
 
 	onSuccess()

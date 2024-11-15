@@ -6,9 +6,13 @@ export const buildSuccessResponse = <T>(data: T): SuccessResponse<T> => ({
 	data: data
 })
 
-export const buildErrorResponse = (error: string): ErrorResponse => ({
+export const buildErrorResponse = (
+	error: string,
+	data?: object
+): ErrorResponse => ({
 	success: false,
-	error: error
+	error: error,
+	...data
 })
 
 export const build500Response = (): ErrorResponse => ({

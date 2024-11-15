@@ -9,3 +9,5 @@ coverage
 
 # IDEs
 .vscode
+
+.data

@@ -11,7 +11,8 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 	const statusCode =
 		err instanceof HttpError ? err.status : res.statusCode ?? 500
 	const errorMessage = err.message ?? SERVER_ERROR_MESSAGE
+	const obj = err instanceof HttpError ? err.data : {}
 
-	logger.error(err)
-	res.status(statusCode).json(buildErrorResponse(errorMessage))
+	logger.error(err.toString())
+	res.status(statusCode).json(buildErrorResponse(errorMessage, obj))
 }

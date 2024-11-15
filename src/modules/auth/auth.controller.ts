@@ -1,7 +1,7 @@
 import type {Request} from 'express'
-
 import * as authService from './auth.service'
 
+import {appConfig, cookieConfig} from '../../configs'
 import {buildSuccessResponse} from '../../utils'
 
 import {
@@ -10,8 +10,6 @@ import {
 	LoginResponse,
 	RefreshHandler
 } from './types'
-
-import {REFRESH_TOKEN_COOKIE} from './constants'
 
 export const login: LoginHandler = async (req, res) => {
 	const userId = (req as Request).user!.id
@@ -24,10 +22,10 @@ export const login: LoginHandler = async (req, res) => {
 
 	res
 		.status(200)
-		.cookie(REFRESH_TOKEN_COOKIE, tokens.refreshToken, {
-			secure: true,
+		.cookie(cookieConfig.refreshCookieName, tokens.refreshToken, {
+			secure: appConfig.isProdEnv,
 			httpOnly: true,
-			maxAge: Date.now() + 24 * 60 * 60 * 1000
+			maxAge: Date.now() + cookieConfig.refreshCookieAge
 		})
 		.json(buildSuccessResponse(response))
 }
