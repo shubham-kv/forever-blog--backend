@@ -11,8 +11,10 @@ app.use(helmet())
 app.use(compression())
 app.use(
 	rateLimit({
-		windowMs: 1 * 60 * 60,
-		max: 20
+		max: 50,
+		windowMs: 1000,
+		standardHeaders: true,
+		legacyHeaders: false
 	})
 )
 
