@@ -16,7 +16,7 @@ export async function createUserUniqueEmailValidator(
 		if (user) {
 			return res
 				.status(400)
-				.json(buildErrorResponse(`Duplicate value for email`))
+				.json(buildErrorResponse('Duplicate value for email'))
 		}
 
 		next()

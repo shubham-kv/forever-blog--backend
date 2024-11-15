@@ -1,21 +1,21 @@
 import mongoose from 'mongoose'
 import {appConfig} from '../configs'
 
-const handleInitialConnectionError = (e: any) => {
-	console.error(`Failed to setup a connection to mongo!`)
+const handleInitialConnectionError = (e: unknown) => {
+	console.error('Failed to setup a connection to mongo!')
 	console.error(e)
 }
 
 const onConnectionOpen = () => {
-	console.log(`MongoDB connection is now open!`)
+	console.log('MongoDB connection is now open!')
 }
 
 const onConnectionError = () => {
-	console.log(`Some MongoDB connection error!`)
+	console.log('Some MongoDB connection error!')
 }
 
 const onDisconnection = () => {
-	console.log(`MongoDB Disconnected`)
+	console.log('MongoDB Disconnected')
 }
 
 export const connectToMongo = async () => {
@@ -27,7 +27,7 @@ export const connectToMongo = async () => {
 		mongoose.connection.once('open', onConnectionOpen)
 		mongoose.connection.on('error', onConnectionError)
 		mongoose.connection.on('disconnected', onDisconnection)
-	} catch (e: any) {
+	} catch (e) {
 		handleInitialConnectionError(e)
 	}
 }

@@ -24,7 +24,7 @@
 	"rules": {
 		"indent": ["error", "tab"],
 		"linebreak-style": ["error", "windows"],
-		"quotes": ["error", "double"],
+		"quotes": ["error", "single"],
 		"semi": ["error", "never"]
 	}
 }

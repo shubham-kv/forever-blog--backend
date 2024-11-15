@@ -1,6 +1,6 @@
 import type {CreateUserDto} from '../../../src/modules/users/dto'
 
-type InvalidCreateUserData = Partial<Record<keyof CreateUserDto, any>>
+type InvalidCreateUserData = Partial<Record<keyof CreateUserDto, unknown>>
 
 export const invalidCreateUserData: InvalidCreateUserData[] = [
 	{},
