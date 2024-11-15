@@ -1,6 +1,5 @@
 import {CreateUserDto} from './dto'
-import {UserEntity} from './user.entity'
-import {User} from './user.model'
+import {UserEntity, User} from '../../shared/modules/user'
 
 import type {CreateUserResponse} from './types'
 

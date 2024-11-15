@@ -6,8 +6,7 @@ import {faker} from '@faker-js/faker'
 import app from '../../src/app'
 
 import {CreateUserDto} from '../../src/modules/users/dto'
-import {UserEntity} from '../../src/modules/users/user.entity'
-import {User} from '../../src/modules/users/user.model'
+import {User, UserEntity} from '../../src/shared/modules/user'
 import type {SuccessResponse} from '../../src/shared/types'
 import type {CreateUserResponse} from '../../src/modules/users/types'
 
