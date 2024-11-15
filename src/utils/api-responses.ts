@@ -1,3 +1,4 @@
+import {SERVER_ERROR_MESSAGE} from '../shared/constants'
 import {ErrorResponse, SuccessResponse} from '../shared/types'
 
 export const buildSuccessResponse = (
@@ -14,5 +15,5 @@ export const buildErrorResponse = (error: string): ErrorResponse => ({
 
 export const build500Response = (): ErrorResponse => ({
 	success: false,
-	error: 'Something went wrong'
+	error: SERVER_ERROR_MESSAGE
 })

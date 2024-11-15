@@ -1,5 +1,3 @@
-import bcrypt from 'bcrypt'
-
 import {CreateUserDto} from './dto'
 import {UserEntity} from './user.entity'
 import {User} from './user.model'
@@ -11,13 +9,11 @@ export async function createUser(
 ): Promise<CreateUserResponse> {
 	const {firstName, lastName, email, password} = data
 
-	const hashed = await bcrypt.hash(password, 10)
-
 	const document = new User({
 		firstName,
 		lastName,
 		email,
-		password: hashed
+		password
 	})
 
 	await document.save()
