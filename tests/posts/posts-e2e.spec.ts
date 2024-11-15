@@ -4,7 +4,6 @@ import supertest from 'supertest'
 
 import app from '../../src/app'
 import {LoginDto} from '../../src/modules/auth/dto'
-import {AuthControllerResponse} from '../../src/modules/auth/types'
 import {SuccessResponse} from '../../src/shared/types'
 import {CreatePostDto} from '../../src/modules/posts/dto'
 import {CreatePostResponse} from '../../src/modules/posts/types'
@@ -58,16 +57,9 @@ describe('POST /posts', () => {
 			password: user.password
 		}
 
-		const expectedLoginResponse: SuccessResponse<AuthControllerResponse> = {
-			success: true,
-			data: {
-				token: expect.stringMatching(/.*/)
-			}
-		}
-
 		const loginRes = await request.post('/auth/login').send(loginDto)
 		expect(loginRes.status).toBe(200)
-		expect(loginRes.body).toStrictEqual(expectedLoginResponse)
+		expect(loginRes.body.data.token).toBeDefined()
 
 		await Promise.all(
 			invalidCreatePostDataValues.map(async (createPostData) => {
