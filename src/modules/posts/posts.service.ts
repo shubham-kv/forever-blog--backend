@@ -1,61 +1,46 @@
-import {Post} from '../../shared/modules/post'
+import {Post, PostEntity} from '../../shared/modules/post'
 
 import {CreatePostDto, UpdatePostDto} from './dto'
-
-import {InternalServerError, NotFoundError} from '../../shared/errors'
 import {CreatePostResponse, GetPostResponse, GetPostsResponse} from './types'
 
 export async function createPost(
 	createPostDto: CreatePostDto,
-	userId: string
+	authorId: string
 ): Promise<CreatePostResponse> {
-	if (!userId) {
-		throw new InternalServerError()
-	}
-
 	const postDocument = new Post({
 		...createPostDto,
-		userId
+		author: authorId
 	})
 	await postDocument.save()
 
 	const {id, title, content} = postDocument
-	const post = {id, title, content}
+	const post = new PostEntity({id, title, content})
 
 	return {
 		post
 	}
 }
 
-export async function getPosts(userId: string): Promise<GetPostsResponse> {
-	if (!userId) {
-		throw new InternalServerError()
-	}
-
-	const rawPosts = await Post.find({userId})
-	const posts = rawPosts.map(({id, title, content}) => ({id, title, content}))
+export async function getPosts(authorId: string): Promise<GetPostsResponse> {
+	const rawPosts = await Post.find({author: authorId})
+	const posts = rawPosts.map(
+		({id, title, content}) => new PostEntity({id, title, content})
+	)
 
 	return {
 		posts
 	}
 }
 
-export async function getPost(
-	userId: string,
-	postId: string
-): Promise<GetPostResponse> {
-	if (!userId || !postId) {
-		throw new InternalServerError()
-	}
+export async function getPost(postId: string): Promise<GetPostResponse> {
+	const postDocument = await Post.findById(postId).populate('author')
 
-	const postDocument = await Post.findOne({_id: postId, userId})
-
-	if (!postDocument) {
-		throw new NotFoundError()
-	}
-
-	const {id, title, content} = postDocument
-	const post = {id, title, content}
+	const {id, title, content} = postDocument!
+	const post = new PostEntity({
+		id,
+		title,
+		content
+	})
 
 	return {
 		post
@@ -63,18 +48,13 @@ export async function getPost(
 }
 
 export async function updatePost(
-	userId: string,
 	postId: string,
 	updatePostData: UpdatePostDto
 ): Promise<GetPostResponse> {
-	if (!userId || !postId) {
-		throw new InternalServerError()
-	}
-
 	const {title: newTitle, content: newContent} = updatePostData
 
-	const postDocument = await Post.findOneAndUpdate(
-		{_id: postId, userId},
+	const postDocument = await Post.findByIdAndUpdate(
+		postId,
 		{
 			$set: {
 				...(newTitle ? {title: newTitle} : {}),
@@ -84,37 +64,18 @@ export async function updatePost(
 		{new: true}
 	)
 
-	if (!postDocument) {
-		throw new NotFoundError()
-	}
-
-	const {id, title, content} = postDocument
-	const post = {
-		id,
-		title,
-		content
-	}
+	const {id, title, content} = postDocument!
+	const post = new PostEntity({id, title, content})
 
 	return {
 		post
 	}
 }
 
-export async function deletePost(
-	userId: string,
-	postId: string
-): Promise<GetPostResponse> {
-	if (!userId || !postId) {
-		throw new InternalServerError()
-	}
+export async function deletePost(postId: string): Promise<GetPostResponse> {
+	const postDocument = await Post.findByIdAndDelete(postId)
 
-	const postDocument = await Post.findOneAndDelete({_id: postId, userId})
-
-	if (!postDocument) {
-		throw new NotFoundError()
-	}
-
-	const {id, title, content} = postDocument
+	const {id, title, content} = postDocument!
 	const post = {id, title, content}
 
 	return {

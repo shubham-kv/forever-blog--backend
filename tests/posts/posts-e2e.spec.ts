@@ -142,7 +142,7 @@ describe('GET /posts', () => {
 	it('gets the posts of the user', async () => {
 		const user = usersData[0]
 		const userDocument = await User.findOne({email: user.email})
-		const postDocuments = await Post.find({userId: userDocument?.id})
+		const postDocuments = await Post.find({author: userDocument?.id})
 
 		const loginDto: LoginDto = {
 			email: user.email,
@@ -219,7 +219,7 @@ describe('GET /posts/:id', () => {
 	it('gets the post of the user', async () => {
 		const user = usersData[0]
 		const userDocument = await User.findOne({email: user.email})
-		const postDocuments = await Post.find({userId: userDocument?.id})
+		const postDocuments = await Post.find({author: userDocument?.id})
 		const postDocument = postDocuments[0]
 
 		const loginDto: LoginDto = {
@@ -277,7 +277,7 @@ describe('PATCH /posts/:id', () => {
 	it('throws 400 for invalid post data', async () => {
 		const user = usersData[0]
 		const userDocument = await User.findOne({email: user.email})
-		const postDocuments = await Post.find({userId: userDocument?.id})
+		const postDocuments = await Post.find({author: userDocument?.id})
 		const postDocument = postDocuments[0]
 
 		const loginDto: LoginDto = {
@@ -347,7 +347,7 @@ describe('PATCH /posts/:id', () => {
 	it('updates the post with the given id', async () => {
 		const user = usersData[0]
 		const userDocument = await User.findOne({email: user.email})
-		const postDocuments = await Post.find({userId: userDocument?.id})
+		const postDocuments = await Post.find({author: userDocument?.id})
 		const postDocument = postDocuments[0]
 
 		const loginDto: LoginDto = {
@@ -446,7 +446,7 @@ describe('DELETE /posts/:id', () => {
 	it('deletes the post with the given id', async () => {
 		const user = usersData[0]
 		const userDocument = await User.findOne({email: user.email})
-		const postDocuments = await Post.find({userId: userDocument?.id})
+		const postDocuments = await Post.find({author: userDocument?.id})
 		const postDocument = postDocuments[0]
 
 		const loginDto: LoginDto = {

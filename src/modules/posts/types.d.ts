@@ -2,14 +2,12 @@ import {RequestHandler} from 'express'
 import {PostEntity} from '../../../shared/modules/post'
 import {CreatePostDto, UpdatePostDto} from './dto'
 
-export type Post = Pick<PostEntity, 'id' | 'title' | 'content'>
-
 export type CreatePostResponse = {
-	post: Post
+	post: PostEntity
 }
 
 export type GetPostsResponse = {
-	posts: Post[]
+	posts: PostEntity[]
 }
 
 export type ParamsWithId = {
@@ -17,7 +15,7 @@ export type ParamsWithId = {
 }
 
 export type GetPostResponse = {
-	post: Post
+	post: PostEntity
 }
 
 type CreatePostResBody = SuccessResponse<CreatePostResponse>
