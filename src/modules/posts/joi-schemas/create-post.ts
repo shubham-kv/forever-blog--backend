@@ -1,9 +1,11 @@
 import {BaseStringSchema, buildObjectSchema} from '../../../shared/schemas'
 
-const title = BaseStringSchema.trim().required().max(256)
-const content = BaseStringSchema.trim().required()
+const title = BaseStringSchema.trim().max(256)
+const content = BaseStringSchema.trim()
 
-export const CreatePostSchema = buildObjectSchema({
-	title,
-	content
-})
+export const createPostObject = {
+	title: title.required(),
+	content: content.required()
+}
+
+export const CreatePostSchema = buildObjectSchema(createPostObject)

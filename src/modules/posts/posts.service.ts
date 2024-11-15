@@ -1,6 +1,6 @@
 import {Post} from '../../shared/modules/post'
 
-import {CreatePostDto} from './dto'
+import {CreatePostDto, UpdatePostDto} from './dto'
 
 import {InternalServerError, NotFoundError} from '../../shared/errors'
 import {CreatePostResponse, GetPostResponse, GetPostsResponse} from './types'
@@ -53,6 +53,48 @@ export async function getPost(
 
 	if (!postDocument) {
 		throw new NotFoundError()
+	}
+
+	const {id, title, content} = postDocument
+	const post = {id, title, content}
+
+	return {
+		post
+	}
+}
+
+export async function updatePost(
+	userId: string,
+	postId: string,
+	updatePostData: UpdatePostDto
+): Promise<GetPostResponse> {
+	if (!userId || !postId) {
+		throw new InternalServerError()
+	}
+
+	const postDocument = (await Post.find({userId})).find(
+		(post) => post.id === postId
+	)
+
+	if (!postDocument) {
+		throw new NotFoundError()
+	}
+
+	const {title: newTitle, content: newContent} = updatePostData
+	let shouldSave = false
+
+	if (newTitle) {
+		postDocument.title = newTitle
+		shouldSave = true
+	}
+
+	if (newContent) {
+		postDocument.content = newContent
+		shouldSave = true
+	}
+
+	if (shouldSave) {
+		await postDocument.save()
 	}
 
 	const {id, title, content} = postDocument
