@@ -1,26 +1,18 @@
-import type {NextFunction, Request, Response} from 'express'
-
 import {User} from '../../../shared/modules/user'
-import {build500Response, buildErrorResponse} from '../../../utils'
+import {BadRequestError} from '../../../shared/errors'
+import {CreateUserHandler} from '../types'
 
-export async function createUserUniqueEmailValidator(
-	req: Request,
-	res: Response,
-	next: NextFunction
-) {
-	const email = req.body.email ?? ''
+export const createUserUniqueEmailValidator: CreateUserHandler = async (
+	req,
+	_res,
+	next
+) => {
+	const email = req.body.email
+	const user = await User.findOne({email})
 
-	try {
-		const user = await User.findOne({email})
-
-		if (user) {
-			return res
-				.status(400)
-				.json(buildErrorResponse('Duplicate value for email'))
-		}
-
-		next()
-	} catch (e) {
-		return res.status(500).json(build500Response())
+	if (user) {
+		throw new BadRequestError('Duplicate value for email')
 	}
+
+	next()
 }

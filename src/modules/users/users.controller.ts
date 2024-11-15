@@ -1,18 +1,11 @@
-import type {Request, Response} from 'express'
+import * as usersService from './users.service'
 
-import * as UsersService from './users.service'
-import {CreateUserDto} from './dto'
+import {buildSuccessResponse} from '../../utils'
+import {CreateUserHandler} from './types'
 
-import {buildSuccessResponse, build500Response} from '../../utils'
+export const createUser: CreateUserHandler = async (req, res) => {
+	const createUserDto = req.body
+	const createUserResponse = await usersService.createUser(createUserDto)
 
-export async function createUser(req: Request, res: Response) {
-	const createUserDto: CreateUserDto = req.body as CreateUserDto
-
-	try {
-		const createUserResponse = await UsersService.createUser(createUserDto)
-		return res.status(201).json(buildSuccessResponse(createUserResponse))
-	} catch (e) {
-		console.error(e)
-		return res.status(500).json(build500Response())
-	}
+	res.status(201).json(buildSuccessResponse(createUserResponse))
 }
