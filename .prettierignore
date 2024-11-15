@@ -1,0 +1,8 @@
+/dist/**
+
+.prettierrc
+
+package.json
+package-lock.json
+
+tsconfig.json
