@@ -6,7 +6,7 @@ import crypto from 'crypto'
 import app from '../../src/app'
 
 import {LoginDto} from '../../src/modules/auth/dto'
-import {AuthControllerResponse} from '../../src/modules/auth/types'
+import {AuthResponse} from '../../src/modules/auth/types'
 import {CreateUserDto} from '../../src/modules/users/dto'
 import {User} from '../../src/shared/modules/user'
 import {SuccessResponse} from '../../src/shared/types'
@@ -76,7 +76,7 @@ describe('POST /auth/login', () => {
 			password: createUserDto.password
 		}
 
-		const expectedResponse: SuccessResponse<AuthControllerResponse> = {
+		const expectedResponse: SuccessResponse<AuthResponse> = {
 			success: true,
 			data: {
 				token: expect.stringMatching(/.*/)
@@ -158,7 +158,7 @@ describe('POST /auth/refresh', () => {
 			password: user.password
 		}
 
-		const expectedRefreshResponse: SuccessResponse<AuthControllerResponse> = {
+		const expectedRefreshResponse: SuccessResponse<AuthResponse> = {
 			success: true,
 			data: {
 				token: expect.stringMatching(/.*/)
