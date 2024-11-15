@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import type {NextFunction, Request, Response} from 'express'
 
 import {LoginDto} from '../dto'
-import {User} from '../../../shared/modules/user'
+import {User, UserEntity} from '../../../shared/modules/user'
 import {buildErrorResponse} from '../../../utils'
 
 import {INVALID_CREDENTIALS_MESSAGE} from '../constants'
@@ -13,15 +13,15 @@ export async function loginCredentialsValidator(
 	next: NextFunction
 ) {
 	const {email, password} = req.body as LoginDto
-	const user = await User.findOne({email})
+	const userDocument = await User.findOne({email})
 
-	if (user) {
-		const isPasswordValid = await bcrypt.compare(password, user.password)
+	if (userDocument) {
+		const isPasswordValid = await bcrypt.compare(password, userDocument.password)
 
 		if (isPasswordValid) {
-			req.user = {
-				id: user._id.toString()
-			}
+			const {id, firstName, lastName, email} = userDocument
+			req.user = new UserEntity({id, firstName, lastName, email})
+
 			return next()
 		}
 	}
