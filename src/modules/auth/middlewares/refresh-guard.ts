@@ -1,7 +1,7 @@
 import jwt, {JwtPayload} from 'jsonwebtoken'
 import type {Request, RequestHandler} from 'express'
 
-import {User, UserEntity} from '../../../../src/shared/modules/user'
+import {User, UserEntity} from '../../../shared/modules/user'
 import {tokenConfig} from '../../../configs'
 
 import {REFRESH_TOKEN_COOKIE} from '../constants'
