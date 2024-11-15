@@ -1,5 +1,6 @@
 # compiled output
 build
+dist
 node_modules
 coverage
 
@@ -10,10 +11,7 @@ coverage
 .vscode
 
 # configs
-.prettierrc
-
-package.json
-package-lock.json
-tsconfig.json
+*.js
+*.json
 
 README.md
