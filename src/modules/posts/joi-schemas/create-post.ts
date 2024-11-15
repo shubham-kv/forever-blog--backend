@@ -1,14 +1,9 @@
-import {
-	BaseJoiStringSchema,
-	buildJoiObjectSchema
-} from '../../../shared/joi-schemas'
+import {BaseStringSchema, buildObjectSchema} from '../../../shared/schemas'
 
-const title = BaseJoiStringSchema.trim().required().max(256)
-const content = BaseJoiStringSchema.trim().required()
+const title = BaseStringSchema.trim().required().max(256)
+const content = BaseStringSchema.trim().required()
 
-const createPostSchema = {
+export const CreatePostSchema = buildObjectSchema({
 	title,
 	content
-}
-
-export const CreatePostSchema = buildJoiObjectSchema(createPostSchema)
+})
