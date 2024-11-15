@@ -4,12 +4,12 @@ export type Result<Data, Error> = {
 	error?: Error
 }
 
-export type ErrorResult = {
-	success: false
+export type ErrorResponse = {
+	success: boolean
 	error: string
 }
 
-export type SuccessResult<T> = {
+export type SuccessResponse<T> = {
 	success: true
-	data: T | any
+	data: T | unknown
 }

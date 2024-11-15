@@ -2,7 +2,7 @@ import {Post} from './post.model'
 import {PostEntity} from './post.entity'
 
 import {CreatePostDto} from './dto'
-import {Result} from '../../shared/types/result'
+import {Result} from '../../shared/types'
 
 type CreatePostSuccessResult = {
 	post: PostEntity

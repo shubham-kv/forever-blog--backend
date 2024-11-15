@@ -1,1 +1,2 @@
-export * from './create-user-body-validator'
+export * from './create-user-schema-validator'
+export * from './create-user-unique-email-validator'
