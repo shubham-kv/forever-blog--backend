@@ -16,7 +16,10 @@ export async function loginCredentialsValidator(
 	const userDocument = await User.findOne({email})
 
 	if (userDocument) {
-		const isPasswordValid = await bcrypt.compare(password, userDocument.password)
+		const isPasswordValid = await bcrypt.compare(
+			password,
+			userDocument.password
+		)
 
 		if (isPasswordValid) {
 			const {id, firstName, lastName, email} = userDocument
