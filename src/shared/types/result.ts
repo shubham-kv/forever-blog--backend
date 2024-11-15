@@ -3,3 +3,13 @@ export type Result<Data, Error> = {
 	data?: Data
 	error?: Error
 }
+
+export type ErrorResult = {
+	success: false
+	error: string
+}
+
+export type SuccessResult<T> = {
+	success: true
+	data: T | any
+}
