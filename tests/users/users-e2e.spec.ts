@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import supertest from 'supertest'
 import bcrypt from 'bcrypt'
 import {faker} from '@faker-js/faker'
@@ -11,48 +10,48 @@ import {User} from '../../src/modules/users/user.model'
 import type {SuccessResponse} from '../../src/shared/types'
 import type {CreateUserResponse} from '../../src/modules/users/types'
 
-import {invalidCreateUserData} from './data/invalid-create-user-data'
+import {invalidCreateUserData, usersData as existingUsersData} from './data'
 
-require('dotenv').config()
+import {clearUsers, seedUsers} from './utils/users-collection'
+import {initiateDbConnection, terminateDbConnection} from './utils/db'
 
-beforeEach(async () => {
-	// initiate connection to the database
-	const mongoUri = process.env.MONGO_URI ?? ''
-
-	if (!mongoUri) {
-		throw new Error('Invalid Mongo URI!')
-	}
-
-	await mongoose.connect(mongoUri)
-})
-
-afterEach(async () => {
-	// disconnect with the database
-	await mongoose.connection.close()
-})
+beforeAll(initiateDbConnection)
+afterAll(terminateDbConnection)
 
 const request = supertest(app)
 
 describe('POST /users', () => {
+	beforeAll(seedUsers)
+	afterAll(clearUsers)
+
+	const errorResponse = {
+		success: false,
+		error: expect.stringMatching(/.*/)
+	}
+
 	it('throws a 400 when invalid data is passed', async () => {
 		await Promise.all(
 			invalidCreateUserData.map(async (createUserData) => {
 				const res = await request.post('/users').send(createUserData)
 
-				const expectedResponse = {
-					success: false,
-					error: expect.stringMatching(/.*/)
-				}
-
 				expect(res.status).toBe(400)
-				expect(res.body).toStrictEqual(expectedResponse)
+				expect(res.body).toStrictEqual(errorResponse)
 			})
 		)
 	})
-})
 
-describe(`POST /users`, () => {
-	it(`adds a new user to the database`, async () => {
+	it('throws a 400 for an existing user', async () => {
+		await Promise.all(
+			existingUsersData.map(async (existingUser) => {
+				const res = await request.post('/users').send(existingUser)
+
+				expect(res.status).toBe(400)
+				expect(res.body).toStrictEqual(errorResponse)
+			})
+		)
+	})
+
+	it(`adds a new non-existing user to the database`, async () => {
 		const user: CreateUserDto = {
 			firstName: faker.person.firstName(),
 			lastName: faker.person.lastName(),
