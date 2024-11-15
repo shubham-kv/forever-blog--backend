@@ -11,7 +11,8 @@
 		"dev": "ts-node-dev src/server",
 		"format": "prettier --write src/**",
 		"test": "cross-env NODE_ENV=test jest --testTimeout=5000",
-		"test:watch": "cross-env NODE_ENV=test jest --watch"
+		"test:watch": "cross-env NODE_ENV=test jest --watch",
+		"test:cov": "cross-env NODE_ENV=test jest --coverage"
 	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",
