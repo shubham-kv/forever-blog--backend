@@ -1,15 +1,15 @@
 import app from './app'
 import {appConfig} from './configs'
 
-import {connectToMongo} from './loaders'
+import {logger} from './modules/logger'
+import {connectToMongodb} from './loaders'
 
 async function bootstrap() {
 	const {port} = appConfig
-
-	connectToMongo()
+	await connectToMongodb()
 
 	app.listen(port, () => {
-		console.log(`\nServer running at http://localhost:${port}/\n`)
+		logger.info(`Server running at http://localhost:${port}/\n`)
 	})
 }
 

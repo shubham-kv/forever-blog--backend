@@ -4,29 +4,32 @@ import {appConfig} from '../configs'
 import {logger} from '../modules'
 
 const handleInitialConnectionError = (e: unknown) => {
-	logger.error('Failed to setup a connection to mongo!')
+	logger.error(`Initial connection to Mongodb threw error '${e}'.`)
 	logger.error(e)
 }
 
 const onConnectionOpen = () => {
-	logger.info('MongoDB connection is now open!')
+	logger.info(`Received 'open' event, Mongodb connected!!!`)
 }
 
-const onConnectionError = () => {
-	logger.info('Some MongoDB connection error!')
+const onConnectionError = (e: unknown) => {
+	logger.info(`Received 'error' event from Mongodb, '${e}'.`)
+	logger.info(e)
 }
 
 const onDisconnection = () => {
-	logger.info('MongoDB Disconnected')
+	logger.info(`Received 'disconnected' event, Mongodb Disconnected.`)
 }
 
-export const connectToMongo = () => {
+export const connectToMongodb = async () => {
 	const {mongoUri} = appConfig
 
-	mongoose
-		.connect(mongoUri)
-		.then(() => logger.info('Mongodb Connected!'))
-		.catch((e) => handleInitialConnectionError(e))
+	try {
+		await mongoose.connect(mongoUri)
+		logger.info(`Yay, Mongodb connected!!!`)
+	} catch (e: unknown) {
+		handleInitialConnectionError(e)
+	}
 
 	mongoose.connection.once('open', onConnectionOpen)
 	mongoose.connection.on('error', onConnectionError)
