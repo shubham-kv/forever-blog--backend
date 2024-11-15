@@ -7,18 +7,21 @@ import {
 	refreshGuard
 } from './middlewares'
 
-import {requestWrapper} from '../../utils'
+import {middlewareWrapper} from '../../utils'
 
 export const authRouter = Router()
 
 authRouter
 	.route('/login')
 	.post(
-		requestWrapper(loginSchemaValidator),
-		requestWrapper(loginCredentialsValidator),
-		requestWrapper(authController.login)
+		middlewareWrapper(loginSchemaValidator),
+		middlewareWrapper(loginCredentialsValidator),
+		middlewareWrapper(authController.login)
 	)
 
 authRouter
 	.route('/refresh')
-	.post(requestWrapper(refreshGuard), requestWrapper(authController.refresh))
+	.post(
+		middlewareWrapper(refreshGuard),
+		middlewareWrapper(authController.refresh)
+	)

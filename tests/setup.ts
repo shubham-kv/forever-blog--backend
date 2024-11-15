@@ -23,7 +23,7 @@ export const terminateDbConnection = async () => {
 
 export async function seedDatabase() {
 	const users = await User.create(usersData)
-	const posts = postsData.map((post) => ({userId: users[0].id, ...post}))
+	const posts = postsData.map((post) => ({...post, author: users[0].id}))
 	await Post.create(posts)
 }
 
