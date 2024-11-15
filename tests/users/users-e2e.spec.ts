@@ -54,7 +54,7 @@ describe('POST /users', () => {
 		expect(res.body).toStrictEqual(errorResponse)
 	})
 
-	it(`adds a new non-existing user to the database`, async () => {
+	it('adds a new non-existing user to the database', async () => {
 		const user: CreateUserDto = {
 			firstName: faker.person.firstName(),
 			lastName: faker.person.lastName(),
@@ -83,7 +83,7 @@ describe('POST /users', () => {
 		expect(isPasswordValid).toBe(true)
 	})
 
-	it(`responds with the created user`, async () => {
+	it('responds with the created user', async () => {
 		const user: CreateUserDto = {
 			firstName: faker.person.firstName(),
 			lastName: faker.person.lastName(),

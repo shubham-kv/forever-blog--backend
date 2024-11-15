@@ -2,38 +2,21 @@ import {Post} from './post.model'
 import {PostEntity} from './post.entity'
 
 import {CreatePostDto} from './dto'
-import {Result} from '../../shared/types'
-
-type CreatePostSuccessResult = {
-	post: PostEntity
-}
-type CreatePostWrappedResult = Result<CreatePostSuccessResult, string>
+import {CreatePostResponse} from './types'
 
 export async function createPost(
 	data: CreatePostDto
-): Promise<CreatePostWrappedResult> {
-	const rawPost = new Post(data)
+): Promise<CreatePostResponse> {
+	const postDocument = new Post(data)
+	await postDocument.save()
 
-	let result: CreatePostWrappedResult = {
-		success: false
-	}
+	const postEntity = new PostEntity({
+		id: postDocument.id,
+		title: postDocument.title,
+		content: postDocument.content
+	})
 
-	try {
-		await rawPost.save()
-
-		result.success = true
-		result.data = {
-			post: new PostEntity({
-				id: rawPost.id,
-				title: rawPost.title,
-				content: rawPost.content
-			})
-		}
-	} catch (e: any) {
-		result.success = false
-		result.error = e.message
-		console.error(e)
-	} finally {
-		return result
+	return {
+		post: postEntity
 	}
 }
