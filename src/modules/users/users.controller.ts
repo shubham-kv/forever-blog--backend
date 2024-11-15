@@ -11,7 +11,7 @@ export async function createUser(req: Request, res: Response) {
 	try {
 		const createUserResponse = await UsersService.createUser(createUserDto)
 		return res.status(201).json(buildSuccessResponse(createUserResponse))
-	} catch (e: any) {
+	} catch (e) {
 		console.error(e)
 		return res.status(500).json(build500Response())
 	}
