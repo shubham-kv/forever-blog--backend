@@ -1,0 +1,10 @@
+# you know it
+node_modules
+
+# compiled output
+build
+dist
+
+# config files at the root level
+*.js
+*.json
