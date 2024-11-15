@@ -1,15 +1,17 @@
 import {ErrorRequestHandler} from 'express'
 
+import {logger} from '../../modules/logger'
 import {HttpError} from '../errors'
 import {buildErrorResponse} from '../../utils'
+
 import {SERVER_ERROR_MESSAGE} from '../constants'
 
-export const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 	const statusCode =
 		err instanceof HttpError ? err.status : res.statusCode ?? 500
-	const errorMessage =
-		err instanceof HttpError ? err.message : SERVER_ERROR_MESSAGE
+	const errorMessage = err.message ?? SERVER_ERROR_MESSAGE
 
+	logger.error(err)
 	res.status(statusCode).json(buildErrorResponse(errorMessage))
-	next()
 }
