@@ -2,7 +2,10 @@ import 'dotenv/config'
 import mongoose from 'mongoose'
 
 import {User} from '../src/shared/modules/user'
+import {Post} from '../src/shared/modules/post'
+
 import {usersData} from './users/data'
+import {postsData} from './posts/data'
 
 export const initiateDbConnection = async () => {
 	const mongoUri = process.env.MONGO_URI
@@ -19,7 +22,9 @@ export const terminateDbConnection = async () => {
 }
 
 export async function seedDatabase() {
-	await User.create(usersData)
+	const users = await User.create(usersData)
+	const posts = postsData.map((post) => ({userId: users[0].id, ...post}))
+	await Post.create(posts)
 }
 
 export async function clearDatabase() {

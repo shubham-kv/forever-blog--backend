@@ -1,4 +1,4 @@
-import {CreatePostDto} from 'src/modules/posts/dto'
+import {CreatePostDto} from '../../../src/modules/posts/dto'
 
 type InvalidCreatePostData = Partial<Record<keyof CreatePostDto, unknown>>
 
