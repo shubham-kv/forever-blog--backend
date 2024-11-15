@@ -1,5 +1,7 @@
-# you know it
+# compiled output
 node_modules
+build
+coverage
 
 # compiled output
 build

@@ -47,7 +47,7 @@ describe('POST /users', () => {
 		const userDoc = new User(createUserDto)
 		await userDoc.save()
 
-		// asset by calling the API
+		// assert by calling the API
 		const res = await request.post('/users').send(createUserDto)
 
 		expect(res.status).toBe(400)
