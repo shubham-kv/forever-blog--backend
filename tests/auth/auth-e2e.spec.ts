@@ -8,7 +8,7 @@ import app from '../../src/app'
 import {LoginDto} from '../../src/modules/auth/dto'
 import {AuthControllerResponse} from '../../src/modules/auth/types'
 import {CreateUserDto} from '../../src/modules/users/dto'
-import {User} from '../../src/modules/users'
+import {User} from '../../src/shared/modules/user'
 import {SuccessResponse} from '../../src/shared/types'
 
 import {

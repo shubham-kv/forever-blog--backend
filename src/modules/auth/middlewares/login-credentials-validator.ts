@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import type {NextFunction, Request, Response} from 'express'
 
 import {LoginDto} from '../dto'
-import {User} from '../../users'
+import {User} from '../../../shared/modules/user'
 import {buildErrorResponse} from '../../../utils'
 
 import {INVALID_CREDENTIALS_MESSAGE} from '../constants'

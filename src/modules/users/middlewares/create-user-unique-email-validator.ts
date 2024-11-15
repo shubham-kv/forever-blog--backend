@@ -1,6 +1,6 @@
 import type {NextFunction, Request, Response} from 'express'
 
-import {User} from '../user.model'
+import {User} from '../../../shared/modules/user'
 import {build500Response, buildErrorResponse} from '../../../utils'
 
 export async function createUserUniqueEmailValidator(
