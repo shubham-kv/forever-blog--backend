@@ -1,19 +1,30 @@
-import {Post} from './post.model'
-import {PostEntity} from './post.entity'
+import {Post, PostEntity} from '..'
+import {User} from '../../shared/modules/user'
 
 import {CreatePostDto} from './dto'
 import {CreatePostResponse} from './types'
 
 export async function createPost(
-	data: CreatePostDto
+	createPostDto: CreatePostDto,
+	userId: string
 ): Promise<CreatePostResponse> {
-	const postDocument = new Post(data)
+	const postDocument = new Post({
+		...createPostDto,
+		userId
+	})
 	await postDocument.save()
 
+	const userDocument = await User.findById(userId)
+	userDocument?.posts.push(postDocument._id)
+
+	await userDocument?.save()
+
+	const {id, title, content} = postDocument
 	const postEntity = new PostEntity({
-		id: postDocument.id,
-		title: postDocument.title,
-		content: postDocument.content
+		id,
+		title,
+		content,
+		userId
 	})
 
 	return {
