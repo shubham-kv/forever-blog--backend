@@ -1,18 +1,14 @@
 import bcrypt from 'bcrypt'
-import type {Request, RequestHandler} from 'express'
+import type {Request} from 'express'
 
-import {LoginDto} from '../dto'
 import {User, UserEntity} from '../../../shared/modules/user'
 
 import {BadRequestError} from '../../../shared/errors'
 import {INVALID_CREDENTIALS_MESSAGE} from '../constants'
+import {LoginHandler} from '../types'
 
-export const loginCredentialsValidator: RequestHandler = async (
-	req: Request,
-	_res,
-	next
-) => {
-	const {email, password} = req.body as LoginDto
+export const loginCredentialsValidator: LoginHandler = async (req, _, next) => {
+	const {email, password} = req.body
 	const userDocument = await User.findOne({email})
 
 	if (!userDocument) {
@@ -26,7 +22,7 @@ export const loginCredentialsValidator: RequestHandler = async (
 	}
 
 	const {id, firstName, lastName} = userDocument
-	req.user = new UserEntity({id, firstName, lastName, email})
+	;(req as Request).user = new UserEntity({id, firstName, lastName, email})
 
 	next()
 }

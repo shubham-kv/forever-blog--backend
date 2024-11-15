@@ -1,5 +1,6 @@
 import {RequestHandler} from 'express'
 import {SuccessResponse} from '../../shared/types'
+import {LoginDto} from './dto'
 
 export type AuthResponse = {
 	token: string
@@ -15,7 +16,7 @@ export type RefreshServiceResponse = {
 }
 
 type LoginResBody = SuccessResponse<AuthResponse>
-export type LoginHandler = RequestHandler<unknown, LoginResBody>
+export type LoginHandler = RequestHandler<unknown, LoginResBody, LoginDto>
 
 type RefreshResBody = SuccessResponse<AuthResponse>
 export type RefreshHandler = RequestHandler<unknown, RefreshResBody>
