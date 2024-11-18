@@ -1,0 +1,31 @@
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      target: dev
+    ports:
+      - 4000:4000
+    depends_on:
+      - mongodb
+    environment:
+      NODE_ENV: test
+      PORT: ${PORT}
+      MONGO_URI: ${TEST_MONGO_URI}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      ACCESS_TOKEN_EXPIRES_IN: ${ACCESS_TOKEN_EXPIRES_IN}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+      REFRESH_TOKEN_EXPIRES_IN: ${REFRESH_TOKEN_EXPIRES_IN}
+      REFRESH_COOKIE_NAME: ${REFRESH_COOKIE_NAME}
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: ${TEST_MONGO_INITDB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
