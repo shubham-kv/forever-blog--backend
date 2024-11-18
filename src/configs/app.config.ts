@@ -7,7 +7,7 @@ type AppConfigType = {
 
 export const appConfig: AppConfigType = {
 	port: parseInt(process.env.PORT || '5000'),
-	mongoUri: process.env.MONGO_URI as string,
-	frontendOrigin: process.env.FRONTEND_ORIGIN as string,
+	mongoUri: process.env.MONGO_URI,
+	frontendOrigin: process.env.FRONTEND_ORIGIN,
 	isProdEnv: process.env.NODE_ENV === 'production'
 }

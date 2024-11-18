@@ -4,6 +4,6 @@ type CookieConfig = {
 }
 
 export const cookieConfig: CookieConfig = {
-	refreshCookieName: process.env.REFRESH_COOKIE_NAME as string,
+	refreshCookieName: process.env.REFRESH_COOKIE_NAME,
 	refreshCookieAge: 2 * 24 * 60 * 60 * 1000 // 2d
 }
