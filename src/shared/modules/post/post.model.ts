@@ -8,8 +8,7 @@ export const PostSchema = new Schema(
 			max: 256
 		},
 		content: {
-			type: String,
-			required: true
+			type: String
 		},
 		author: {
 			type: Schema.Types.ObjectId,
