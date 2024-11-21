@@ -1,8 +1,8 @@
 import {BaseStringSchema, buildObjectSchema} from '../../../shared/schemas'
 
-const name = BaseStringSchema.trim().min(3).max(256)
-const email = BaseStringSchema.trim()
-const password = BaseStringSchema.trim().min(8).max(256)
+const name = BaseStringSchema.trim().min(3).max(100)
+const email = BaseStringSchema.trim().email().min(1).max(100)
+const password = BaseStringSchema.trim().min(8).max(32)
 
 export const CreateUserJoiSchema = buildObjectSchema({
 	firstName: name.required(),
