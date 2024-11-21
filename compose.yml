@@ -5,7 +5,6 @@
 # https://github.com/docker/awesome-compose
 services:
   backend-server:
-    container_name: backend-server
     build:
       context: .
     ports:
@@ -25,7 +24,6 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: mongodb
     restart: always
     ports:
       - 27017:27017
