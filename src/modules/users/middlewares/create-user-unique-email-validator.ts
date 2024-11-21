@@ -11,7 +11,7 @@ export const createUserUniqueEmailValidator: CreateUserHandler = async (
 	const user = await User.findOne({email})
 
 	if (user) {
-		throw new BadRequestError('Duplicate value for email')
+		throw new BadRequestError('Invalid email')
 	}
 
 	next()
