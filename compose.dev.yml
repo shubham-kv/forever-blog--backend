@@ -1,6 +1,5 @@
 services:
-  backend-server:
-    container_name: backend-server
+  backend:
     build:
       context: .
       target: dev
@@ -24,7 +23,6 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: mongodb
     restart: always
     ports:
       - 27017:27017
@@ -36,7 +34,6 @@ services:
       - ./.data/mongodb-dev:/data/db
 
   mongo-express:
-    container_name: mongo-express
     image: mongo-express
     restart: always
     ports:

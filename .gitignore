@@ -12,3 +12,4 @@ coverage
 .vscode
 
 .data
+.DS_Store
