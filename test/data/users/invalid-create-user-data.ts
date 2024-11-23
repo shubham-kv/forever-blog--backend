@@ -1,4 +1,4 @@
-import type {CreateUserDto} from '../../../src/modules/users/dto'
+import type {CreateUserDto} from '@/modules/users/dto'
 
 type InvalidCreateUserData = Partial<Record<keyof CreateUserDto, unknown>>
 

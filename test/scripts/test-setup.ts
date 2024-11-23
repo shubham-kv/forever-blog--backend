@@ -1,11 +1,13 @@
+import {afterAll, afterEach, beforeAll, beforeEach} from 'vitest'
+
 import 'dotenv/config'
 import mongoose from 'mongoose'
 
-import {User} from '../src/shared/modules/user'
-import {Post} from '../src/shared/modules/post'
+import {User} from '@/shared/modules/user'
+import {Post} from '@/shared/modules/post'
 
-import {usersData} from './users/data'
-import {postsData} from './posts/data'
+import {usersData} from '../data/users'
+import {postsData} from '../data/posts'
 
 export const initiateDbConnection = async () => {
 	const mongoUri = process.env.MONGO_URI
@@ -15,9 +17,11 @@ export const initiateDbConnection = async () => {
 	}
 
 	await mongoose.connect(mongoUri)
+	await seedDatabase()
 }
 
 export const terminateDbConnection = async () => {
+	await clearDatabase()
 	await mongoose.connection.close()
 }
 
@@ -37,11 +41,11 @@ export async function clearDatabase() {
 	)
 }
 
-export function setup() {
+export function testSetup() {
 	beforeAll(initiateDbConnection)
 
-	beforeEach(seedDatabase)
-	afterEach(clearDatabase)
+	// beforeEach(seedDatabase)
+	// afterEach(clearDatabase)
 
 	afterAll(terminateDbConnection)
 }

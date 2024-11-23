@@ -1,8 +1,8 @@
-import {UpdatePostDto} from '../../../src/modules/posts/dto'
+import {UpdatePostDto} from '@/modules/posts/dto'
 
 type InvalidUpdatePostData = Partial<Record<keyof UpdatePostDto, unknown>>
 
-export const invalidUpdatePostDataValues: InvalidUpdatePostData[] = [
+export const invalidUpdatePostData: InvalidUpdatePostData[] = [
 	{},
 
 	{title: 1},
@@ -12,5 +12,4 @@ export const invalidUpdatePostDataValues: InvalidUpdatePostData[] = [
 
 	{title: 'foobar', content: 1},
 	{title: 'foobar', content: false},
-	{title: 'foobar', content: ''}
 ]

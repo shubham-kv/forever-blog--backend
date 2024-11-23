@@ -1,8 +1,8 @@
-import {CreatePostDto} from '../../../src/modules/posts/dto'
+import {CreatePostDto} from '@/modules/posts/dto'
 
 type InvalidCreatePostData = Partial<Record<keyof CreatePostDto, unknown>>
 
-export const invalidCreatePostDataValues: InvalidCreatePostData[] = [
+export const invalidCreatePostData: InvalidCreatePostData[] = [
 	{},
 
 	{title: 1},

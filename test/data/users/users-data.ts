@@ -1,5 +1,5 @@
 import {faker} from '@faker-js/faker'
-import {CreateUserDto} from '../../../src/modules/users/dto'
+import {CreateUserDto} from '@/modules/users/dto'
 
 export const usersData: CreateUserDto[] = new Array(5).fill(0).map(() => ({
 	firstName: faker.person.firstName(),

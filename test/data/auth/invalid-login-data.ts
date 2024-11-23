@@ -1,5 +1,5 @@
 import {faker} from '@faker-js/faker'
-import {LoginDto} from '../../../src/modules/auth/dto'
+import {LoginDto} from '@/modules/auth/dto'
 
 type InvalidLoginData = Partial<Record<keyof LoginDto, unknown>>
 

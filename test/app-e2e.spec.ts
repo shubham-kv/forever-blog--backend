@@ -1,10 +1,11 @@
+import {describe, expect, test} from 'vitest'
 import supertest from 'supertest'
-import app from '../src/app'
+import app from '@/app'
 
 const request = supertest(app)
 
 describe('GET /hello', () => {
-	it("should return 'hello world'", async () => {
+	test("should return 'hello world'", async () => {
 		const res = await request.get('/hello')
 
 		expect(res.status).toBe(200)

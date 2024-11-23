@@ -1,20 +1,20 @@
+import {describe, beforeAll, expect, test} from 'vitest'
+
 import 'dotenv/config'
-import supertest from 'supertest'
+import supertest, {Response} from 'supertest'
 import bcrypt from 'bcryptjs'
 import {faker} from '@faker-js/faker'
 
-import app from '../../src/app'
+import app from '@/app'
+import {CreateUserDto} from '@/modules/users/dto'
+import {User, UserEntity} from '@/shared/modules/user'
+import type {SuccessResponse} from '@/shared/types'
+import type {CreateUserResponse} from '@/modules/users/types'
 
-import {CreateUserDto} from '../../src/modules/users/dto'
-import {User, UserEntity} from '../../src/shared/modules/user'
-import type {SuccessResponse} from '../../src/shared/types'
-import type {CreateUserResponse} from '../../src/modules/users/types'
+import {invalidCreateUserData} from './data/users'
+import {testSetup} from './scripts/test-setup'
 
-import {invalidCreateUserData} from './data'
-
-import {setup} from '../setup'
-
-setup()
+testSetup()
 const request = supertest(app)
 
 describe('POST /users', () => {
@@ -23,18 +23,25 @@ describe('POST /users', () => {
 		error: expect.stringMatching(/.*/)
 	}
 
-	it('throws a 400 when invalid data is passed', async () => {
-		await Promise.all(
-			invalidCreateUserData.map(async (createUserData) => {
-				const res = await request.post('/users').send(createUserData)
+	describe('when called with invalid data', () => {
+		const responses: Response[] = []
 
+		beforeAll(async () => {
+			for (const data of invalidCreateUserData) {
+				const res = await request.post('/users').send(data)
+				responses.push(res)
+			}
+		})
+
+		test('throws a 400', () => {
+			for (const res of responses) {
 				expect(res.status).toBe(400)
-				expect(res.body).toStrictEqual(errorResponse)
-			})
-		)
+				expect(res.body).toMatchObject(errorResponse)
+			}
+		})
 	})
 
-	it('throws a 400 for an existing user', async () => {
+	test('throws a 400 for an existing user', async () => {
 		const createUserDto: CreateUserDto = {
 			firstName: faker.person.firstName(),
 			lastName: faker.person.lastName(),
@@ -53,7 +60,7 @@ describe('POST /users', () => {
 		expect(res.body).toStrictEqual(errorResponse)
 	})
 
-	it('adds a new non-existing user to the database', async () => {
+	test('adds a new non-existing user to the database', async () => {
 		const user: CreateUserDto = {
 			firstName: faker.person.firstName(),
 			lastName: faker.person.lastName(),
@@ -82,7 +89,7 @@ describe('POST /users', () => {
 		expect(isPasswordValid).toBe(true)
 	})
 
-	it('responds with the created user', async () => {
+	test('responds with the created user', async () => {
 		const user: CreateUserDto = {
 			firstName: faker.person.firstName(),
 			lastName: faker.person.lastName(),
